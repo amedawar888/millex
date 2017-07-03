@@ -179,10 +179,36 @@ public class Game {
 	}
 	
 	private void printStats() {
-		System.out.println(" You currently have " + food + " food. \n" +
-				" You currently have " + lumber + " lumber. \n" +
-				" You currently have " + buildPower + " build power. \n" +
-				" You currently have " + finance + " gold. \n"); 
+		int males = 0;
+		int females = 0;
+		int newPreg = 0, midPreg = 0, endPreg = 0;
+		
+		for (int i=0; i<subs.size(); i++) {
+			Person sub = subs.get(i);
+			if (sub.gender) {
+				males++;
+			}
+			else {
+				females++;
+				int pregStage = sub.getPregnancyStage();
+				if (pregStage == 0) {
+					newPreg++;
+				}
+				else if (pregStage == 1) {
+					midPreg++;
+				}
+				else if (pregStage == 2) {
+					endPreg++;
+				}
+			}
+		}
+		
+		System.out.println(food + " food | " +
+				lumber + " lumber | " +
+				buildPower + " build power | " +
+				finance + " gold\n" +
+				"You have " + males + " males, and " + females + " females in your tribe.\n" +
+				newPreg + " females are newly pregnant. " + midPreg + " females are mid-pregnancy. " + endPreg + " females are about to give birth."); 
 	}
 	
 	public void endTurn() {
