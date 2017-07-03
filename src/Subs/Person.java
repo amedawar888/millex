@@ -35,10 +35,12 @@ public class Person {
 		return pregnancyStage;
 	}
 	
-	public void makePregnant() {
+	public boolean makePregnant() {
 		if (!gender && !pregnant) {
 			pregnant = true;
 			pregnancyStage = 0;
+			return true;
 		}
+		return false;
 	}
 }
