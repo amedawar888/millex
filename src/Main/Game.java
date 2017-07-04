@@ -37,7 +37,7 @@ public class Game {
 	
 	///////////////////////
 	
-	public String[] procs = {"halfrations", "doublerations"};
+	public String[] procs = {"halfrations", "doublerations", "feast"};
 	
 	///////////////////////
 	
@@ -59,6 +59,8 @@ public class Game {
 	public double doubleRations = 2;
 	
 	public double foodMultiplier = 1;
+	
+	public double feastCost = 0.25;
 	
 	public ArrayList<Person> subs = new ArrayList<Person>();
 	
@@ -140,6 +142,14 @@ public class Game {
 				handleProclamations();
 			}
 		}
+		else if (gamerChoiceProc.equals(procs[2])) {
+			feastCost = 0.25;
+			System.out.println("You have successfully chosen to feast! Would you like to declare another proclamation?\n Yes | no.");
+			boolean yesOrNoResp = yesOrNoInput();
+			if (yesOrNoResp) {
+				handleProclamations();
+			}
+		}
 		else if (gamerChoiceProc.equals("cancel")) {
 			System.out.println("No proclamations issued.");
 			return;
@@ -214,7 +224,10 @@ public class Game {
 	public void endTurn() {
 		turn ++;
 		resolveCmds();
+		handleSubs();
 		
+			//check if sub is giving birth -> add persons to subset and set givingbirth to false
+		popGrowth();
 		eatFood();
 		printStats();
 		
@@ -237,7 +250,22 @@ public class Game {
 		cmdList.clear();
 		System.out.println("Next Turn: It is now turn "+turn+".");
 	}
+
+	public void handleSubs() {
+		int newPeoples = 0;
+		for (Person sub : subs) { //for element in array -> ":"
+			sub.step();
+			if (sub.birth) {
+				newPeoples++;
+				sub.birth = false;
+			}
+		}
+		for (int i=0; i < newPeoples; i++) {
+			subs.add(new Person());
+		}
+	}
 	
+		
 	public void resolveCmds() {
 		for (int i=0; i<cmdList.size(); i++) {
 			if (cmdList.get(i)==0) {
@@ -276,6 +304,26 @@ public class Game {
 	}
 	
 	
+	public void popGrowth() {
+		int numPregs = 0;
+		int numNewPregs = 0;
+		double foodPopRat = Math.min((double) food / (double) subs.size(), 2); //cap is var -> feast affects it
+		if (foodPopRat >= 0.5) {
+			numPregs = (int)Math.ceil((0.25+(Math.random()*0.5))*(double)subs.size()*(foodPopRat/10));
+			ArrayList<Person> females = getSubsByGender(false);
+			for (Person sub : females) {
+				if (numNewPregs >= numPregs) {
+					break;
+				}
+				if (sub.makePregnant()) {
+					numNewPregs++;
+				}
+				
+			}
+			
+		}
+	}
+	
 	public void eatFood() {
 		int foodC = 0;
 		
@@ -286,7 +334,19 @@ public class Game {
 		food -= foodC*foodMultiplier;
 		foodMultiplier = 1;
 	}
-
+	
+	public ArrayList<Person> getSubsByGender(boolean gen){
+		ArrayList<Person> subList = new ArrayList<Person>();
+		
+		for (Person sub : subs){
+			if (sub.gender==gen) {
+				subList.add(sub);
+				
+			}
+		}
+		
+		return subList;
+	}
 }
 //City of Millex		
 //turn based sim

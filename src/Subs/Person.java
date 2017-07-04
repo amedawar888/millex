@@ -10,6 +10,7 @@ public class Person {
 	private boolean pregnant = false;
 	private int pregnancyStage = -1;
 	public boolean gender = Tools.chance(0.5);
+	public boolean birth = false;
 	
 	public Person() {
 		
@@ -27,6 +28,8 @@ public class Person {
 			else if (pregnancyStage >= 2) {
 				pregnancyStage = -1;
 				pregnant = false;
+				birth = true;
+			
 			}
 		}
 	}
