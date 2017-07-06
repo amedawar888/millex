@@ -3,10 +3,16 @@ package Main;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+import Buildings.BuildingManager;
+import Resources.ResourceManager;
 import Subs.Person;
+import Misc.Command;
 
 public class Game {
 	
+	
+	public ResourceManager Resources = new ResourceManager();
+	public BuildingManager Buildings = new BuildingManager();
 	
 	public Scanner scan = new Scanner(System.in);
 	
