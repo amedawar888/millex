@@ -9,7 +9,7 @@ public class BuildingManager {
 	private ResourceManager resources;
 
 	private ArrayList<Building> homes = new ArrayList<Building>();
-	private ArrayList<Building> farms = new ArrayList<Building>();
+	private ArrayList<Farm> farms = new ArrayList<Farm>();
 	private ArrayList<Building> lumberyards = new ArrayList<Building>();
 	private ArrayList<Building> markets = new ArrayList<Building>();
 	
@@ -18,7 +18,13 @@ public class BuildingManager {
 	}
 	
 	public int farm() {
+		int foodOut = 0;
 		
+		for (Farm farm : farms) {
+			foodOut+= farm.getFoodProduced();
+		}
+		
+		return foodOut;
 	}
 	
 }
