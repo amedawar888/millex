@@ -6,6 +6,10 @@ public class ResourceManager {
 	private int lumber = 0;
 	private int trade = 0;
 	
+	public ResourceManager(int f) {
+		food = f;
+	}
+	
 	public int getFood() {
 		return food;
 	}
