@@ -32,7 +32,12 @@ public class Person {
 		foodConsumed = f;
 	}
 	
+	public void setAge(int a) {
+		age = a;
+	}
+	
 	public void step() {
+		age++;
 		if (pregnant) {
 			if (pregnancyStage < 2) {
 				pregnancyStage++;
