@@ -54,8 +54,6 @@ public class Game {
 	
 	///////////////////////
 	
-	private int food = 50;
-	
 	private int lumber = 20;
 	
 	private int buildPower = 20;
@@ -226,7 +224,7 @@ public class Game {
 			}
 		}
 		
-		System.out.println(food + " food | " +
+		System.out.println(Resources.getFood() + " food | " +
 				lumber + " lumber | " +
 				buildPower + " build power | " +
 				finance + " gold\n" +
@@ -239,13 +237,13 @@ public class Game {
 		resolveCmds();
 		handleSubs();
 		
-			//check if sub is giving birth -> add persons to subset and set givingbirth to false
+		//check if sub is giving birth -> add persons to subset and set givingbirth to false
 		popGrowth();
 		eatFood();
 		printStats();
 		
-		if (food <=0) {
-			food=0;
+		if (Resources.getFood() <=0) {
+			Resources.removeFood(Resources.getFood());
 			System.out.println("you're out of fucking food, breh.");
 		}
 		if (lumber <=0) {
@@ -297,8 +295,8 @@ public class Game {
 	}
 		
 	public void farm() {
-		food+=15;
-		System.out.println("You've successfully farmed! You have " + food + " food.");
+		Resources.addFood(15);
+		System.out.println("You've successfully farmed! You have " + Resources.getFood() + " food.");
 	}
 	public void lumber() {
 		lumber+=5;
@@ -312,7 +310,7 @@ public class Game {
 	}
 	public void finance() {
 		finance+=10;
-		food-=3;
+		Resources.removeFood(3);
 		System.out.println("You've successfully financed! You have " + finance + " gold.");
 	}
 	
@@ -320,7 +318,7 @@ public class Game {
 	public void popGrowth() {
 		int numPregs = 0;
 		int numNewPregs = 0;
-		double foodPopRat = Math.min((double) food / (double) subs.size(), 2); //cap is var -> feast affects it
+		double foodPopRat = Math.min((double) Resources.getFood() / (double) subs.size(), 2); //cap is var -> feast affects it
 		if (foodPopRat >= 0.5) {
 			numPregs = (int)Math.ceil((0.25+(Math.random()*0.5))*(double)subs.size()*(foodPopRat/10));
 			ArrayList<Person> females = getSubsByGender(false);
@@ -344,7 +342,7 @@ public class Game {
 			foodC += subs.get(i).foodConsumed;
 		}
 		
-		food -= foodC*foodMultiplier;
+		Resources.removeFood((int)(foodC*foodMultiplier));
 		foodMultiplier = 1;
 	}
 	

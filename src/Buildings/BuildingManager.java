@@ -21,7 +21,7 @@ public class BuildingManager {
 		int foodOut = 0;
 		
 		for (Farm farm : farms) {
-			foodOut+= farm.getFoodProduced();
+			foodOut += farm.getFoodProduced();
 		}
 		
 		resources.addFood(foodOut);
