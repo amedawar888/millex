@@ -1,3 +1,10 @@
+//City of Millex		
+//turn based sim
+//ran by subordinates
+//users can type in commands for the townspeople to do
+//actions -> gather food / farm / town meetings / build 
+//supplies of food , homes
+
 package Main;
 
 import java.util.ArrayList;
@@ -11,14 +18,14 @@ import Misc.Command;
 public class Game {
 	
 	
-	public ResourceManager Resources = new ResourceManager();
-	public BuildingManager Buildings = new BuildingManager();
+	public ResourceManager Resources = new ResourceManager(50);
+	public BuildingManager Buildings = new BuildingManager(Resources);
 	
 	public Scanner scan = new Scanner(System.in);
 	
 	/////////////////////////
 	
-	public int turn = 1;	
+	public int turn = 1;
 	
 	public String endTurnCmd = "end turn";
 	
@@ -354,9 +361,3 @@ public class Game {
 		return subList;
 	}
 }
-//City of Millex		
-//turn based sim
-//ran by subordinates
-//users can type in commands for the townspeople to do
-//actions -> gather food / farm / town meetings / build 
-//supplies of food , homes
