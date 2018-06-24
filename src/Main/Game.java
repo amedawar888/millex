@@ -283,6 +283,9 @@ public class Game {
 				newPeoples++;
 				sub.birth = false;
 			}
+			if (sub.isDead()) {
+				
+			}
 		}
 		for (int i=0; i < newPeoples; i++) {
 			subs.add(new Person());

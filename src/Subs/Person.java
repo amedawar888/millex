@@ -12,6 +12,8 @@ public class Person {
 	
 	//Age is measured in turns (seasons). 0-16 = child; 16-40 = adult; 40+ elder.
 	private int age;
+	private double deathThreshold = 0.01;
+	private boolean dead = false;
 	private boolean pregnant = false;
 	private int pregnancyStage = -1;
 	public boolean gender = Tools.chance(0.5);
@@ -48,8 +50,17 @@ public class Person {
 		return !isChild() && !isElder();
 	}
 	
+	public boolean isDead() {
+		return dead;
+	}
+	
 	public void step() {
 		age++;
+		double badLuck = Math.random();
+		deathThreshold += (Math.random()/1000);
+		if (badLuck >= deathThreshold) {
+			dead = true;
+		}
 		if (pregnant) {
 			if (pregnancyStage < 2) {
 				pregnancyStage++;
@@ -67,7 +78,7 @@ public class Person {
 	}
 	
 	public boolean makePregnant() {
-		if (!gender && !pregnant) {
+		if (!gender && !pregnant && isAdult() && !dead) {
 			pregnant = true;
 			pregnancyStage = 0;
 			return true;
