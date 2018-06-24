@@ -235,7 +235,7 @@ public class Game {
 	}
 	
 	public void endTurn() {
-		turn ++;
+		advanceTime();
 		resolveCmds();
 		handleSubs();
 		
@@ -264,6 +264,15 @@ public class Game {
 		System.out.println("Next Turn: It is now turn "+turn+".");
 	}
 
+	public void advanceTime() {
+		turn ++;
+		if (turn >= 4) {
+			year++;
+			turn = 0;
+		}
+		System.out.println(seasons[turn] + " - Year " + year);
+	}
+	
 	public void handleSubs() {
 		int newPeoples = 0;
 		for (Person sub : subs) { //for element in array -> ":"
