@@ -24,7 +24,7 @@ public class BuildingManager {
 			foodOut += farm.getFoodProduced();
 		}
 		
-		resources.addFood(foodOut);
+		resources.adjustResource("food", foodOut);
 		
 		return foodOut;
 	}

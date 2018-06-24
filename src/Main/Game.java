@@ -228,7 +228,7 @@ public class Game {
 			}
 		}
 		
-		System.out.println(Resources.getFood() + " food | " +
+		System.out.println(Resources.getResource("food") + " food | " +
 				lumber + " lumber | " +
 				buildPower + " build power | " +
 				finance + " gold\n" +
@@ -246,8 +246,8 @@ public class Game {
 		eatFood();
 		printStats();
 		
-		if (Resources.getFood() <=0) {
-			Resources.removeFood(Resources.getFood());
+		if (Resources.getResource("food") <=0) {
+			Resources.adjustResource("food", 0);
 			System.out.println("you're out of fucking food, breh.");
 		}
 		if (lumber <=0) {
@@ -299,8 +299,8 @@ public class Game {
 	}
 		
 	public void farm() {
-		Resources.addFood(15);
-		System.out.println("You've successfully farmed! You have " + Resources.getFood() + " food.");
+		Resources.adjustResource("food", 15);
+		System.out.println("You've successfully farmed! You have " + Resources.getResource("food") + " food.");
 	}
 	public void lumber() {
 		lumber+=5;
@@ -314,7 +314,7 @@ public class Game {
 	}
 	public void finance() {
 		finance+=10;
-		Resources.removeFood(3);
+		Resources.adjustResource("food", -3);
 		System.out.println("You've successfully financed! You have " + finance + " gold.");
 	}
 	
@@ -322,7 +322,7 @@ public class Game {
 	public void popGrowth() {
 		int numPregs = 0;
 		int numNewPregs = 0;
-		double foodPopRat = Math.min((double) Resources.getFood() / (double) subs.size(), 2); //cap is var -> feast affects it
+		double foodPopRat = Math.min((double) Resources.getResource("food") / (double) subs.size(), 2); //cap is var -> feast affects it
 		if (foodPopRat >= 0.5) {
 			numPregs = (int)Math.ceil((0.25+(Math.random()*0.5))*(double)subs.size()*(foodPopRat/10));
 			ArrayList<Person> females = getSubsByGender(false);
@@ -346,7 +346,7 @@ public class Game {
 			foodC += subs.get(i).foodConsumed;
 		}
 		
-		Resources.removeFood((int)(foodC*foodMultiplier));
+		Resources.adjustResource("food", -(int)(foodC*foodMultiplier));
 		foodMultiplier = 1;
 	}
 	
