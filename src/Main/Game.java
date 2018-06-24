@@ -25,7 +25,9 @@ public class Game {
 	
 	/////////////////////////
 	
-	public int turn = 1;
+	public int turn = 0, year = 1;
+	
+	public String[] seasons = {"spring", "summer", "fall", "winter"};
 	
 	public String endTurnCmd = "end turn";
 	
