@@ -8,6 +8,8 @@
 package Main;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Scanner;
 
 import Buildings.BuildingManager;
@@ -26,6 +28,8 @@ public class Game {
 	/////////////////////////
 	
 	public int turn = 1;
+	
+	public Map<String, String> cmds = new HashMap<>();
 	
 	public String endTurnCmd = "end turn";
 	
