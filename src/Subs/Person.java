@@ -36,6 +36,18 @@ public class Person {
 		age = a;
 	}
 	
+	public boolean isChild() {
+		return age <= 16;
+	}
+	
+	public boolean isElder() {
+		return age >= 40;
+	}
+	
+	public boolean isAdult() {
+		return !isChild() && !isElder();
+	}
+	
 	public void step() {
 		age++;
 		if (pregnant) {
@@ -46,7 +58,6 @@ public class Person {
 				pregnancyStage = -1;
 				pregnant = false;
 				birth = true;
-			
 			}
 		}
 	}
