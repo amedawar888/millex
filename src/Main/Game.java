@@ -67,6 +67,8 @@ public class Game {
 	
 	public int startingPopulation = 23;
 	
+	private int deathCount = 0;
+	
 	public double halfRations =  0.5;
 	
 	public double doubleRations = 2;
@@ -263,7 +265,13 @@ public class Game {
 			System.out.println("you're out of fucking moniez, nigga.");
 		}
 		cmdList.clear();
-		System.out.println("Next Turn: It is now turn "+turn+".");
+		
+		if (deathCount > 0) {
+			System.out.println("Aweeee fuck, you've lost " + deathCount + " niggas");
+			deathCount = 0;
+		}
+		
+		System.out.println();
 	}
 
 	public void advanceTime() {
@@ -286,6 +294,7 @@ public class Game {
 			}
 			if (sub.isDead()) {
 				deadPeople.add(sub);
+				deathCount++;
 			}
 		}
 		subs.removeAll(deadPeople);
