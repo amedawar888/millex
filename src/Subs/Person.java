@@ -58,7 +58,7 @@ public class Person {
 		age++;
 		double badLuck = Math.random();
 		deathThreshold += (Math.random()/1000);
-		if (badLuck >= deathThreshold) {
+		if (badLuck <= deathThreshold) {
 			dead = true;
 		}
 		if (pregnant) {
