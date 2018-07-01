@@ -277,6 +277,7 @@ public class Game {
 	
 	public void handleSubs() {
 		int newPeoples = 0;
+		ArrayList<Person> deadPeople = new ArrayList<Person>();
 		for (Person sub : subs) { //for element in array -> ":"
 			sub.step();
 			if (sub.birth) {
@@ -284,9 +285,11 @@ public class Game {
 				sub.birth = false;
 			}
 			if (sub.isDead()) {
-				
+				deadPeople.add(sub);
 			}
 		}
+		subs.removeAll(deadPeople);
+		
 		for (int i=0; i < newPeoples; i++) {
 			subs.add(new Person());
 		}
