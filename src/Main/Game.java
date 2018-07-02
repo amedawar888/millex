@@ -13,9 +13,9 @@ import java.util.Map;
 import java.util.Scanner;
 
 import Buildings.BuildingManager;
+import Misc.CommandOptions;
 import Resources.ResourceManager;
 import Subs.Person;
-import Misc.Command;
 
 public class Game {
 	
@@ -29,7 +29,9 @@ public class Game {
 	
 	public int turn = 1;
 	
-	public Map<String, String> cmds = new HashMap<>();
+	public Map<String, CommandOptions> cmds = new HashMap<>();
+	
+	private int numCmds = 0;
 	
 	public String endTurnCmd = "end turn";
 	
@@ -50,7 +52,7 @@ public class Game {
 	
 	private ArrayList<Integer> cmdList = new ArrayList<Integer>();
 	
-	private int cmdLimit = 5;
+	private final int CMDLIMIT = 5;
 	
 	///////////////////////
 	
@@ -80,6 +82,12 @@ public class Game {
 	public ArrayList<Person> subs = new ArrayList<Person>();
 	
 	public Game() {
+		cmds.put("stats", new CommandOptions("printStats", false));
+		cmds.put("options", new CommandOptions("printOptions", false));
+		cmds.put("proclaim", new CommandOptions("startProclamation", false));
+		cmds.put("collect", new CommandOptions("startCollect", true));
+		cmds.put("build", new CommandOptions("startBuild", true));
+		cmds.put("end turn", new CommandOptions("endTurn", false));
 		
 		System.out.println("Welcome, Gamer, to the city of Millex. \n You will be responsible for maintaining, cultivating, \n and enhancing this city and the lives of it's inhabitants. ");
 		initPopulation(startingPopulation);
