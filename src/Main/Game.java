@@ -172,6 +172,14 @@ public class Game {
 				scavenge();
 				numCmds++;
 			}
+			else if (input.equals("hunt")) {
+				hunt();
+				numCmds++;
+			}
+			else if (input.equals("chop wood")) {
+				chopWood();
+				numCmds++;
+			}
 			else {
 				System.out.println("I don't recognize that command. Try 'options' to view available commands");
 				reset = true;
@@ -323,8 +331,21 @@ public class Game {
 	}
 	
 	private void scavenge() {
-		Resources.adjustResource("food", 10);
-		System.out.println("You've successfully scavenged! You have " + Resources.getResource("food") + " food.");
+		int food = 5 + (int)(Math.ceil(Math.random()*5));
+		Resources.adjustResource("food", food);
+		System.out.println("You've successfully scavenged " + food + " food! You have " + Resources.getResource("food") + " food.");
+	}
+	
+	private void hunt() {
+		int food = (int)Math.ceil((Math.random()*20));
+		Resources.adjustResource("food", food);
+		System.out.println("You've successfully hunted " + food + " food! You have " + Resources.getResource("food") + " food.");
+	}
+	
+	private void chopWood() {
+		int lumber = 10 + (int)(Math.ceil(Math.random()*15));
+		Resources.adjustResource("lumber", lumber);
+		System.out.println("You've successfully collected " + lumber + " lumber! You have " + Resources.getResource("lumber") + " lumber.");
 	}
 	
 	/*
