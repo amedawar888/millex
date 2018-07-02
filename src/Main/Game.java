@@ -390,11 +390,13 @@ public class Game {
 	
 	public void endTurn() {
 		turn ++;
-		resolveCmds();
-		handleSubs();
 		
+		handleSubs();
 		//check if sub is giving birth -> add persons to subset and set givingbirth to false
 		popGrowth();
+		
+		handleBuildings();
+		
 		eatFood();
 		printStats();
 		
@@ -454,6 +456,16 @@ public class Game {
 	private void buildLumberyard() {
 		System.out.println("Building lumberyard...");
 	}
+	
+	/*
+	 * Building Handling
+	 */
+	private void handleBuildings() {
+		int farmedFood = Buildings.farm();
+		System.out.println("You farmed " + farmedFood + " food.");
+	}
+	
+	// End Building Handling
 	
 	/*
 	 * Population Handling
