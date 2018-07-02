@@ -137,7 +137,7 @@ public class Game {
 		if (cmd != null) {
 			if (cmd.requiresCommand) {
 				if (numCmds >= CMDLIMIT) {
-					System.out.println("Sorry! You're out of commands for this turn!");
+					System.out.println("Unfortunately sir, you're out of commands for this turn.");
 				}
 				else {
 					callMethodFromCommand(cmd.method);
@@ -153,6 +153,34 @@ public class Game {
 		
 		System.out.println();
 		scanInput();
+	}
+	
+	private void startCollect() {
+		System.out.println("What would you like your subjects to collect?");
+		String input = scan.nextLine().toLowerCase();
+		boolean reset = false;
+		
+		if (input.equals("options")) {
+			System.out.println("Available options: scavenge | hunt | chop wood |");
+			reset = true;
+		}
+		else if (input.equals("cancel")) {
+			System.out.println("Cancelling collect command.");
+		}
+		else {
+			if (input.equals("scavenge")) {
+				scavenge();
+				numCmds++;
+			}
+			else {
+				System.out.println("I don't recognize that command. Try 'options' to view available commands");
+				reset = true;
+			}
+		}
+		
+		if (reset) {
+			startCollect();
+		}
 	}
 	
 	private void handleProclamations() {
@@ -292,6 +320,10 @@ public class Game {
 		}
 		cmdList.clear();
 		System.out.println("Next Turn: It is now turn "+turn+".");
+	}
+	
+	private void scavenge() {
+		System.out.println("Scavenging.");
 	}
 	
 	/*
