@@ -22,7 +22,7 @@ import Subs.Person;
 public class Game {
 	
 	
-	public ResourceManager Resources = new ResourceManager(50);
+	public ResourceManager Resources = new ResourceManager(new int[]{50,20,100});
 	public BuildingManager Buildings = new BuildingManager(Resources);
 	
 	public Scanner scan = new Scanner(System.in);

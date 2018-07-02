@@ -7,8 +7,10 @@ public class ResourceManager {
 	
 	private Map<String, Integer> resources = new HashMap<>();
 	
-	public ResourceManager(int f) {
-		resources.put("food", f);
+	public ResourceManager(int[] resources) {
+		this.resources.put("food", resources[0]);
+		this.resources.put("lumber", resources[1]);
+		this.resources.put("gold", resources[2]);
 	}
 	
 	public int getResource(String key) {
