@@ -27,17 +27,14 @@ public class Person {
 	
 	
 	public Person() {
-		
+		age = 0;
 	}
 	
-	public Person(int f) {
-		foodConsumed = f;
-	}
-	
-	public void setAge(int a) {
+	public Person(int a) {
 		age = a;
+		deathThreshold += (Math.random()/1000)*age;
 	}
-	
+
 	public boolean isChild() {
 		return age <= 16;
 	}

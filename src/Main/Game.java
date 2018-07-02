@@ -88,8 +88,7 @@ public class Game {
 	
 	private void initPopulation(int numSubs) {
 		for(int i = 0; i<numSubs; i++) {
-			Person person = new Person();
-			person.setAge(16 + (int)Math.ceil(Math.random()*8));
+			Person person = new Person(16 + (int)Math.ceil(Math.random()*8));
 			subs.add(person);
 		}
 	}
