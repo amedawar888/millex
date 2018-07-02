@@ -223,6 +223,14 @@ public class Game {
 		
 	}
 	
+	private void printOptions() {
+		String outStr = "Available commands: ";
+		for (String key : cmds.keySet()) {
+			outStr += key + " | ";
+		}
+		System.out.println(outStr);
+	}
+	
 	private void printStats() {
 		int males = 0;
 		int females = 0;
