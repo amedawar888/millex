@@ -158,7 +158,8 @@ public class Game {
 	private void startCollect() {
 		System.out.println("What would you like your subjects to collect? Enter 'cancel' to exit without issuing a command.");
 		String input = scan.nextLine().toLowerCase();
-		boolean reset = false;
+		boolean reset = false,
+				issueCmd = false;
 		
 		if (input.equals("options")) {
 			System.out.println("Available options: scavenge | hunt | chop wood");
@@ -170,18 +171,27 @@ public class Game {
 		else {
 			if (input.equals("scavenge")) {
 				scavenge();
-				numCmds++;
+				issueCmd = true;
 			}
 			else if (input.equals("hunt")) {
 				hunt();
-				numCmds++;
+				issueCmd = true;
 			}
 			else if (input.equals("chop wood")) {
 				chopWood();
-				numCmds++;
+				issueCmd = true;
 			}
 			else {
 				System.out.println("I don't recognize that command. Try 'options' to view available commands");
+				reset = true;
+			}
+		}
+		
+		if (issueCmd) {
+			numCmds++;
+			System.out.println("Would you like to issue another collection command?");
+			boolean answer = yesOrNoInput();
+			if (answer) {
 				reset = true;
 			}
 		}
