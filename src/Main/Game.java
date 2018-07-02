@@ -7,18 +7,22 @@
 
 package Main;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Scanner;
 
 import Buildings.BuildingManager;
+import Misc.CommandOptions;
 import Resources.ResourceManager;
 import Subs.Person;
-import Misc.Command;
 
 public class Game {
 	
 	
-	public ResourceManager Resources = new ResourceManager(50);
+	public ResourceManager Resources = new ResourceManager(new int[]{50,20,100});
 	public BuildingManager Buildings = new BuildingManager(Resources);
 	
 	public Scanner scan = new Scanner(System.in);
@@ -26,6 +30,10 @@ public class Game {
 	/////////////////////////
 	
 	public int turn = 1;
+	
+	public Map<String, CommandOptions> cmds = new HashMap<>();
+	
+	private int numCmds = 0;
 	
 	public String endTurnCmd = "end turn";
 	
@@ -46,7 +54,7 @@ public class Game {
 	
 	private ArrayList<Integer> cmdList = new ArrayList<Integer>();
 	
-	private int cmdLimit = 5;
+	private final int CMDLIMIT = 5;
 	
 	///////////////////////
 	
@@ -76,6 +84,12 @@ public class Game {
 	public ArrayList<Person> subs = new ArrayList<Person>();
 	
 	public Game() {
+		cmds.put("stats", new CommandOptions("printStats", false));
+		cmds.put("options", new CommandOptions("printOptions", false));
+//		cmds.put("proclaim", new CommandOptions("startProclamation", false));
+		cmds.put("collect", new CommandOptions("startCollect", true));
+//		cmds.put("build", new CommandOptions("startBuild", true));
+		cmds.put("end turn", new CommandOptions("endTurn", false));
 		
 		System.out.println("Welcome, Gamer, to the city of Millex. \n You will be responsible for maintaining, cultivating, \n and enhancing this city and the lives of it's inhabitants. ");
 		initPopulation(startingPopulation);
@@ -88,47 +102,103 @@ public class Game {
 		}
 	}
 	
+	private void callMethodFromCommand(String methodStr) {
+		try {
+			Method method = Game.class.getDeclaredMethod(methodStr);
+			method.setAccessible(true);
+			try {
+				method.invoke(this);
+			}
+			catch (IllegalAccessException e) {
+				e.printStackTrace();
+			}
+			catch (IllegalArgumentException e) {
+				e.printStackTrace();
+			}
+			catch (InvocationTargetException e) {
+				e.printStackTrace();
+			}
+		}
+		catch (NoSuchMethodException e) {
+			e.printStackTrace();
+		}
+		catch (SecurityException e) {
+			e.printStackTrace();
+		}
+	}
+	
 	public void scanInput() {
 		System.out.println("What would you like to do at this point? Type 'options' to view choices.");
 		System.out.println("You may also check your stats by typing 'stats'.");
 		System.out.println("You may also type 'proclamation' to initiate ration control.");
 		String gamerChoice = scan.nextLine().toLowerCase();
 		
-		
-		if (gamerChoice.equals(endTurnCmd)) {
-			endTurn();
-		}
-		else if (gamerChoice.equals(viewCmds)) {
-			System.out.println(" farm | lumber | build | finance.");		
-		}
-		
-		else if (gamerChoice.equals(proclamationCmd) || gamerChoice.equals(procCmd)) {
-			handleProclamations();
-		}
-		else if (gamerChoice.equals(statsCmd)) {
-			printStats();	
-		}
-		else if (cmdLimit>cmdList.size()) {
-			if (gamerChoice.equals(farmCmd)) {
-				cmdList.add(0);	
+		CommandOptions cmd = cmds.get(gamerChoice);
+		if (cmd != null) {
+			if (cmd.requiresCommand) {
+				if (numCmds >= CMDLIMIT) {
+					System.out.println("Unfortunately sir, you're out of commands for this turn.");
+				}
+				else {
+					callMethodFromCommand(cmd.method);
+				}
 			}
-			if (gamerChoice.equals(lumberCmd)) {
-				cmdList.add(1);	
+			else {
+				callMethodFromCommand(cmd.method);
 			}
-			if (gamerChoice.equals(buildCmd)) {
-				cmdList.add(2);	
-			}
-			if (gamerChoice.equals(financeCmd)) {
-				cmdList.add(3);	
-			}
-	
 		}
-		
 		else {
-			System.out.println("Sorry! You're out of commands for this turn!");
+			System.out.println("Sorry, I don't recognize that command. Try 'options' to see your available options.");
 		}
-		scanInput();
 		
+		System.out.println();
+		scanInput();
+	}
+	
+	private void startCollect() {
+		System.out.println("What would you like your subjects to collect? Enter 'cancel' to exit without issuing a command.");
+		String input = scan.nextLine().toLowerCase();
+		boolean reset = false,
+				issueCmd = false;
+		
+		if (input.equals("options")) {
+			System.out.println("Available options: scavenge | hunt | chop wood");
+			reset = true;
+		}
+		else if (input.equals("cancel")) {
+			System.out.println("Cancelling collect command.");
+		}
+		else {
+			if (input.equals("scavenge")) {
+				scavenge();
+				issueCmd = true;
+			}
+			else if (input.equals("hunt")) {
+				hunt();
+				issueCmd = true;
+			}
+			else if (input.equals("chop wood")) {
+				chopWood();
+				issueCmd = true;
+			}
+			else {
+				System.out.println("I don't recognize that command. Try 'options' to view available commands");
+				reset = true;
+			}
+		}
+		
+		if (issueCmd) {
+			numCmds++;
+			System.out.println("Would you like to issue another collection command?");
+			boolean answer = yesOrNoInput();
+			if (answer) {
+				reset = true;
+			}
+		}
+		
+		if (reset) {
+			startCollect();
+		}
 	}
 	
 	private void handleProclamations() {
@@ -199,6 +269,14 @@ public class Game {
 		
 	}
 	
+	private void printOptions() {
+		String outStr = "Available commands: ";
+		for (String key : cmds.keySet()) {
+			outStr += key + " | ";
+		}
+		System.out.println(outStr);
+	}
+	
 	private void printStats() {
 		int males = 0;
 		int females = 0;
@@ -224,7 +302,7 @@ public class Game {
 			}
 		}
 		
-		System.out.println(Resources.getFood() + " food | " +
+		System.out.println(Resources.getResource("food") + " food | " +
 				lumber + " lumber | " +
 				buildPower + " build power | " +
 				finance + " gold\n" +
@@ -242,8 +320,8 @@ public class Game {
 		eatFood();
 		printStats();
 		
-		if (Resources.getFood() <=0) {
-			Resources.removeFood(Resources.getFood());
+		if (Resources.getResource("food") <=0) {
+			Resources.adjustResource("food", 0);
 			System.out.println("you're out of fucking food, breh.");
 		}
 		if (lumber <=0) {
@@ -261,10 +339,31 @@ public class Game {
 		cmdList.clear();
 		System.out.println("Next Turn: It is now turn "+turn+".");
 	}
-
-	public void handleSubs() {
+	
+	private void scavenge() {
+		int food = 5 + (int)(Math.ceil(Math.random()*5));
+		Resources.adjustResource("food", food);
+		System.out.println("You've successfully scavenged " + food + " food! You have " + Resources.getResource("food") + " food.");
+	}
+	
+	private void hunt() {
+		int food = (int)Math.ceil((Math.random()*20));
+		Resources.adjustResource("food", food);
+		System.out.println("You've successfully hunted " + food + " food! You have " + Resources.getResource("food") + " food.");
+	}
+	
+	private void chopWood() {
+		int lumber = 10 + (int)(Math.ceil(Math.random()*15));
+		Resources.adjustResource("lumber", lumber);
+		System.out.println("You've successfully collected " + lumber + " lumber! You have " + Resources.getResource("lumber") + " lumber.");
+	}
+	
+	/*
+	 * Population Handling
+	 */
+	private void handleSubs() {
 		int newPeoples = 0;
-		for (Person sub : subs) { //for element in array -> ":"
+		for (Person sub : subs) {
 			sub.step();
 			if (sub.birth) {
 				newPeoples++;
@@ -276,7 +375,55 @@ public class Game {
 		}
 	}
 	
+	private void popGrowth() {
+		int numPregs = 0;
+		int numNewPregs = 0;
+		double foodPopRat = Math.min((double) Resources.getResource("food") / (double) subs.size(), 2); //cap is var -> feast affects it
+		if (foodPopRat >= 0.5) {
+			numPregs = (int)Math.ceil((0.25+(Math.random()*0.5))*(double)subs.size()*(foodPopRat/10));
+			ArrayList<Person> females = getSubsByGender(false);
+			for (Person sub : females) {
+				if (numNewPregs >= numPregs) {
+					break;
+				}
+				if (sub.makePregnant()) {
+					numNewPregs++;
+				}
+				
+			}
+			
+		}
+	}
+	
+	private void eatFood() {
+		int foodC = 0;
 		
+		for (int i=0; i<subs.size(); i++) {
+			foodC += subs.get(i).foodConsumed;
+		}
+		
+		Resources.adjustResource("food", -(int)(foodC*foodMultiplier));
+		foodMultiplier = 1;
+	}
+	
+	private ArrayList<Person> getSubsByGender(boolean gen){
+		ArrayList<Person> subList = new ArrayList<Person>();
+		
+		for (Person sub : subs){
+			if (sub.gender==gen) {
+				subList.add(sub);
+				
+			}
+		}
+		
+		return subList;
+	}
+	
+	// End Population Handling
+	
+	/*
+	 * Legacy Stuff
+	 */
 	public void resolveCmds() {
 		for (int i=0; i<cmdList.size(); i++) {
 			if (cmdList.get(i)==0) {
@@ -295,8 +442,8 @@ public class Game {
 	}
 		
 	public void farm() {
-		Resources.addFood(15);
-		System.out.println("You've successfully farmed! You have " + Resources.getFood() + " food.");
+		Resources.adjustResource("food", 15);
+		System.out.println("You've successfully farmed! You have " + Resources.getResource("food") + " food.");
 	}
 	public void lumber() {
 		lumber+=5;
@@ -310,52 +457,9 @@ public class Game {
 	}
 	public void finance() {
 		finance+=10;
-		Resources.removeFood(3);
+		Resources.adjustResource("food", -3);
 		System.out.println("You've successfully financed! You have " + finance + " gold.");
 	}
 	
-	
-	public void popGrowth() {
-		int numPregs = 0;
-		int numNewPregs = 0;
-		double foodPopRat = Math.min((double) Resources.getFood() / (double) subs.size(), 2); //cap is var -> feast affects it
-		if (foodPopRat >= 0.5) {
-			numPregs = (int)Math.ceil((0.25+(Math.random()*0.5))*(double)subs.size()*(foodPopRat/10));
-			ArrayList<Person> females = getSubsByGender(false);
-			for (Person sub : females) {
-				if (numNewPregs >= numPregs) {
-					break;
-				}
-				if (sub.makePregnant()) {
-					numNewPregs++;
-				}
-				
-			}
-			
-		}
-	}
-	
-	public void eatFood() {
-		int foodC = 0;
-		
-		for (int i=0; i<subs.size(); i++) {
-			foodC += subs.get(i).foodConsumed;
-		}
-		
-		Resources.removeFood((int)(foodC*foodMultiplier));
-		foodMultiplier = 1;
-	}
-	
-	public ArrayList<Person> getSubsByGender(boolean gen){
-		ArrayList<Person> subList = new ArrayList<Person>();
-		
-		for (Person sub : subs){
-			if (sub.gender==gen) {
-				subList.add(sub);
-				
-			}
-		}
-		
-		return subList;
-	}
+	// End Legacy Stuff
 }
