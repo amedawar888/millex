@@ -133,41 +133,26 @@ public class Game {
 		System.out.println("You may also type 'proclamation' to initiate ration control.");
 		String gamerChoice = scan.nextLine().toLowerCase();
 		
-		
-		if (gamerChoice.equals(endTurnCmd)) {
-			endTurn();
-		}
-		else if (gamerChoice.equals(viewCmds)) {
-			System.out.println(" farm | lumber | build | finance.");		
-		}
-		
-		else if (gamerChoice.equals(proclamationCmd) || gamerChoice.equals(procCmd)) {
-			handleProclamations();
-		}
-		else if (gamerChoice.equals(statsCmd)) {
-			printStats();	
-		}
-		else if (cmdLimit>cmdList.size()) {
-			if (gamerChoice.equals(farmCmd)) {
-				cmdList.add(0);	
+		CommandOptions cmd = cmds.get(gamerChoice);
+		if (cmd != null) {
+			if (cmd.requiresCommand) {
+				if (numCmds >= CMDLIMIT) {
+					System.out.println("Sorry! You're out of commands for this turn!");
+				}
+				else {
+					callMethodFromCommand(cmd.method);
+				}
 			}
-			if (gamerChoice.equals(lumberCmd)) {
-				cmdList.add(1);	
+			else {
+				callMethodFromCommand(cmd.method);
 			}
-			if (gamerChoice.equals(buildCmd)) {
-				cmdList.add(2);	
-			}
-			if (gamerChoice.equals(financeCmd)) {
-				cmdList.add(3);	
-			}
-	
 		}
-		
 		else {
-			System.out.println("Sorry! You're out of commands for this turn!");
+			System.out.println("Sorry, I don't recognize that command. Try 'options' to see your available options.");
 		}
-		scanInput();
 		
+		System.out.println();
+		scanInput();
 	}
 	
 	private void handleProclamations() {
