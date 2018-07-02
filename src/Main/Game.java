@@ -323,7 +323,8 @@ public class Game {
 	}
 	
 	private void scavenge() {
-		System.out.println("Scavenging.");
+		Resources.adjustResource("food", 10);
+		System.out.println("You've successfully scavenged! You have " + Resources.getResource("food") + " food.");
 	}
 	
 	/*
