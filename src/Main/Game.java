@@ -86,9 +86,9 @@ public class Game {
 	public Game() {
 		cmds.put("stats", new CommandOptions("printStats", false));
 		cmds.put("options", new CommandOptions("printOptions", false));
-		cmds.put("proclaim", new CommandOptions("startProclamation", false));
+//		cmds.put("proclaim", new CommandOptions("startProclamation", false));
 		cmds.put("collect", new CommandOptions("startCollect", true));
-		cmds.put("build", new CommandOptions("startBuild", true));
+//		cmds.put("build", new CommandOptions("startBuild", true));
 		cmds.put("end turn", new CommandOptions("endTurn", false));
 		
 		System.out.println("Welcome, Gamer, to the city of Millex. \n You will be responsible for maintaining, cultivating, \n and enhancing this city and the lives of it's inhabitants. ");
