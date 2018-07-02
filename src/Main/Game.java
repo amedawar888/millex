@@ -271,7 +271,7 @@ public class Game {
 		}
 		
 		if (reset) {
-			startCollect();
+			startBuild();
 		}
 	}
 	
