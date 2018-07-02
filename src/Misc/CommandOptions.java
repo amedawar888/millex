@@ -1,9 +1,11 @@
 package Misc;
 
 public class CommandOptions {
-	public String type;
+	public String method;
+	public boolean requiresCommand;
 	
-	public CommandOptions(String t) {
-		type = t;
+	public CommandOptions(String method, boolean requires) {
+		this.method = method;
+		this.requiresCommand = requires;
 	}
 }
