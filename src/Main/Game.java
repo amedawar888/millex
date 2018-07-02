@@ -7,6 +7,8 @@
 
 package Main;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -97,6 +99,31 @@ public class Game {
 	private void initPopulation(int numSubs) {
 		for(int i = 0; i<numSubs; i++) {
 			subs.add(new Person());
+		}
+	}
+	
+	private void callMethodFromCommand(String methodStr) {
+		try {
+			Method method = Game.class.getDeclaredMethod(methodStr);
+			method.setAccessible(true);
+			try {
+				method.invoke(this);
+			}
+			catch (IllegalAccessException e) {
+				e.printStackTrace();
+			}
+			catch (IllegalArgumentException e) {
+				e.printStackTrace();
+			}
+			catch (InvocationTargetException e) {
+				e.printStackTrace();
+			}
+		}
+		catch (NoSuchMethodException e) {
+			e.printStackTrace();
+		}
+		catch (SecurityException e) {
+			e.printStackTrace();
 		}
 	}
 	
