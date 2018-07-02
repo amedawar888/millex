@@ -156,12 +156,12 @@ public class Game {
 	}
 	
 	private void startCollect() {
-		System.out.println("What would you like your subjects to collect?");
+		System.out.println("What would you like your subjects to collect? Enter 'cancel' to exit without issuing a command.");
 		String input = scan.nextLine().toLowerCase();
 		boolean reset = false;
 		
 		if (input.equals("options")) {
-			System.out.println("Available options: scavenge | hunt | chop wood |");
+			System.out.println("Available options: scavenge | hunt | chop wood");
 			reset = true;
 		}
 		else if (input.equals("cancel")) {
