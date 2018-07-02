@@ -242,8 +242,14 @@ public class Game {
 				System.out.println("Are you sure you want to build a lumberyard? It will cost 45 lumber and 20 food to build.");
 				boolean issue = yesOrNoInput();
 				if (issue) {
-					buildLumberyard();
-					issueCmd = true;
+					boolean built = buildLumberyard();
+					if (built) {						
+						issueCmd = true;
+						System.out.println("Lumberyard built.");
+					}
+					else {
+						System.out.println("Sir, you do not have enough resources to build a lumberyard.");
+					}
 				}
 				else {
 					System.out.println("Canceling lumberyard build.");
@@ -453,8 +459,10 @@ public class Game {
 		return Buildings.buildFarm();
 	}
 	
-	private void buildLumberyard() {
+	private boolean buildLumberyard() {
+		System.out.println();
 		System.out.println("Building lumberyard...");
+		return Buildings.buildLumberyard();
 	}
 	
 	/*
