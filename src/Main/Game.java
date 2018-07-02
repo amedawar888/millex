@@ -470,7 +470,13 @@ public class Game {
 	 */
 	private void handleBuildings() {
 		int farmedFood = Buildings.farm();
-		System.out.println("You farmed " + farmedFood + " food.");
+		int choppedLumber = Buildings.chopWood();
+		if (farmedFood > 0) {			
+			System.out.println("You farmed " + farmedFood + " food.");
+		}
+		if (choppedLumber > 0) {
+			System.out.println("You chopped " + choppedLumber + " lumber with lumberyards.");
+		}
 	}
 	
 	// End Building Handling

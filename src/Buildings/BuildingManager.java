@@ -49,4 +49,16 @@ public class BuildingManager {
 		return foodOut;
 	}
 	
+	public int chopWood() {
+		int lumberOut = 0;
+		
+		for (Lumberyard lumberyard : lumberyards) {
+			lumberOut += lumberyard.getLumberProduced();
+		}
+		
+		resources.adjustResource("lumber", lumberOut);
+		
+		return lumberOut;
+	}
+	
 }
