@@ -189,10 +189,15 @@ public class Game {
 		
 		if (issueCmd) {
 			numCmds++;
-			System.out.println("Would you like to issue another collection command?");
-			boolean answer = yesOrNoInput();
-			if (answer) {
-				reset = true;
+			if (numCmds>=CMDLIMIT) {
+				System.out.println("You're now out of commands.");
+			}
+			else {				
+				System.out.println("Would you like to issue another collection command?");
+				boolean answer = yesOrNoInput();
+				if (answer) {
+					reset = true;
+				}
 			}
 		}
 		
