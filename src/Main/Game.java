@@ -88,7 +88,7 @@ public class Game {
 		cmds.put("options", new CommandOptions("printOptions", false));
 //		cmds.put("proclaim", new CommandOptions("startProclamation", false));
 		cmds.put("collect", new CommandOptions("startCollect", true));
-//		cmds.put("build", new CommandOptions("startBuild", true));
+		cmds.put("build", new CommandOptions("startBuild", true));
 		cmds.put("end turn", new CommandOptions("endTurn", false));
 		
 		System.out.println("Welcome, Gamer, to the city of Millex. \n You will be responsible for maintaining, cultivating, \n and enhancing this city and the lives of it's inhabitants. ");
@@ -206,6 +206,85 @@ public class Game {
 		}
 	}
 	
+	private void startBuild() {
+		System.out.println("What would you like your subjects to build? Enter 'cancel' to exit without issuing a command.");
+		String input = scan.nextLine().toLowerCase();
+		boolean reset = false,
+				issueCmd = false;
+		
+		if (input.equals("options")) {
+			System.out.println("Available options: farm | lumberyard");
+			reset = true;
+		}
+		else if (input.equals("cancel")) {
+			System.out.println("Cancelling build command.");
+		}
+		else {
+			if (input.equals("farm")) {
+				System.out.println("Are you sure you want to build a farm? It will cost 20 lumber and 40 food to build.");
+				boolean issue = yesOrNoInput();
+				if (issue) {
+					boolean built = buildFarm();
+					if (built) {
+						issueCmd = true;
+						System.out.println("Farm built.");
+					}
+					else {
+						System.out.println("Sir, you do not have enough resources to build a farm.");
+					}
+				}
+				else {
+					System.out.println("Canceling farm build.");
+					reset = true;
+				}
+			}
+			else if (input.equals("lumberyard")) {
+				System.out.println("Are you sure you want to build a lumberyard? It will cost 45 lumber and 20 food to build.");
+				boolean issue = yesOrNoInput();
+				if (issue) {
+					boolean built = buildLumberyard();
+					if (built) {						
+						issueCmd = true;
+						System.out.println("Lumberyard built.");
+					}
+					else {
+						System.out.println("Sir, you do not have enough resources to build a lumberyard.");
+					}
+				}
+				else {
+					System.out.println("Canceling lumberyard build.");
+					reset = true;
+				}
+			}
+			else {
+				System.out.println("I don't recognize that command. Try 'options' to view available commands");
+				reset = true;
+			}
+		}
+		
+		if (issueCmd) {
+			numCmds++;
+			if (numCmds>=CMDLIMIT) {
+				System.out.println("You're now out of commands.");
+			}
+			else {				
+				System.out.println("Would you like to issue another build command?");
+				boolean answer = yesOrNoInput();
+				if (answer) {
+					reset = true;
+				}
+			}
+		}
+		
+		if (reset) {
+			startBuild();
+		}
+	}
+	
+	private void confirmBuild() {
+		
+	}
+	
 	private void handleProclamations() {
 		System.out.println("Type the proclamation you want to issue.");
 		printProcs();
@@ -317,13 +396,17 @@ public class Game {
 	
 	public void endTurn() {
 		turn ++;
-		resolveCmds();
-		handleSubs();
 		
+		handleSubs();
 		//check if sub is giving birth -> add persons to subset and set givingbirth to false
 		popGrowth();
+		
+		handleBuildings();
+		
 		eatFood();
 		printStats();
+		
+		numCmds = 0;
 		
 		if (Resources.getResource("food") <=0) {
 			Resources.adjustResource("food", 0);
@@ -345,6 +428,9 @@ public class Game {
 		System.out.println("Next Turn: It is now turn "+turn+".");
 	}
 	
+	/*
+	 * Collect commands
+	 */
 	private void scavenge() {
 		int food = 5 + (int)(Math.ceil(Math.random()*5));
 		Resources.adjustResource("food", food);
@@ -362,6 +448,38 @@ public class Game {
 		Resources.adjustResource("lumber", lumber);
 		System.out.println("You've successfully collected " + lumber + " lumber! You have " + Resources.getResource("lumber") + " lumber.");
 	}
+	
+	/*
+	 * Build commands
+	 */
+	
+	private boolean buildFarm() {
+		System.out.println();
+		System.out.println("Building farm...");
+		return Buildings.buildFarm();
+	}
+	
+	private boolean buildLumberyard() {
+		System.out.println();
+		System.out.println("Building lumberyard...");
+		return Buildings.buildLumberyard();
+	}
+	
+	/*
+	 * Building Handling
+	 */
+	private void handleBuildings() {
+		int farmedFood = Buildings.farm();
+		int choppedLumber = Buildings.chopWood();
+		if (farmedFood > 0) {			
+			System.out.println("You farmed " + farmedFood + " food.");
+		}
+		if (choppedLumber > 0) {
+			System.out.println("You chopped " + choppedLumber + " lumber with lumberyards.");
+		}
+	}
+	
+	// End Building Handling
 	
 	/*
 	 * Population Handling
