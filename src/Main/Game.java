@@ -293,10 +293,13 @@ public class Game {
 		cmdList.clear();
 		System.out.println("Next Turn: It is now turn "+turn+".");
 	}
-
-	public void handleSubs() {
+	
+	/*
+	 * Population Handling
+	 */
+	private void handleSubs() {
 		int newPeoples = 0;
-		for (Person sub : subs) { //for element in array -> ":"
+		for (Person sub : subs) {
 			sub.step();
 			if (sub.birth) {
 				newPeoples++;
@@ -308,7 +311,55 @@ public class Game {
 		}
 	}
 	
+	private void popGrowth() {
+		int numPregs = 0;
+		int numNewPregs = 0;
+		double foodPopRat = Math.min((double) Resources.getResource("food") / (double) subs.size(), 2); //cap is var -> feast affects it
+		if (foodPopRat >= 0.5) {
+			numPregs = (int)Math.ceil((0.25+(Math.random()*0.5))*(double)subs.size()*(foodPopRat/10));
+			ArrayList<Person> females = getSubsByGender(false);
+			for (Person sub : females) {
+				if (numNewPregs >= numPregs) {
+					break;
+				}
+				if (sub.makePregnant()) {
+					numNewPregs++;
+				}
+				
+			}
+			
+		}
+	}
+	
+	private void eatFood() {
+		int foodC = 0;
 		
+		for (int i=0; i<subs.size(); i++) {
+			foodC += subs.get(i).foodConsumed;
+		}
+		
+		Resources.adjustResource("food", -(int)(foodC*foodMultiplier));
+		foodMultiplier = 1;
+	}
+	
+	private ArrayList<Person> getSubsByGender(boolean gen){
+		ArrayList<Person> subList = new ArrayList<Person>();
+		
+		for (Person sub : subs){
+			if (sub.gender==gen) {
+				subList.add(sub);
+				
+			}
+		}
+		
+		return subList;
+	}
+	
+	// End Population Handling
+	
+	/*
+	 * Legacy Stuff
+	 */
 	public void resolveCmds() {
 		for (int i=0; i<cmdList.size(); i++) {
 			if (cmdList.get(i)==0) {
@@ -346,48 +397,5 @@ public class Game {
 		System.out.println("You've successfully financed! You have " + finance + " gold.");
 	}
 	
-	
-	public void popGrowth() {
-		int numPregs = 0;
-		int numNewPregs = 0;
-		double foodPopRat = Math.min((double) Resources.getResource("food") / (double) subs.size(), 2); //cap is var -> feast affects it
-		if (foodPopRat >= 0.5) {
-			numPregs = (int)Math.ceil((0.25+(Math.random()*0.5))*(double)subs.size()*(foodPopRat/10));
-			ArrayList<Person> females = getSubsByGender(false);
-			for (Person sub : females) {
-				if (numNewPregs >= numPregs) {
-					break;
-				}
-				if (sub.makePregnant()) {
-					numNewPregs++;
-				}
-				
-			}
-			
-		}
-	}
-	
-	public void eatFood() {
-		int foodC = 0;
-		
-		for (int i=0; i<subs.size(); i++) {
-			foodC += subs.get(i).foodConsumed;
-		}
-		
-		Resources.adjustResource("food", -(int)(foodC*foodMultiplier));
-		foodMultiplier = 1;
-	}
-	
-	public ArrayList<Person> getSubsByGender(boolean gen){
-		ArrayList<Person> subList = new ArrayList<Person>();
-		
-		for (Person sub : subs){
-			if (sub.gender==gen) {
-				subList.add(sub);
-				
-			}
-		}
-		
-		return subList;
-	}
+	// End Legacy Stuff
 }
