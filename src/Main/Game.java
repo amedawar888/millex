@@ -398,6 +398,8 @@ public class Game {
 		eatFood();
 		printStats();
 		
+		numCmds = 0;
+		
 		if (Resources.getResource("food") <=0) {
 			Resources.adjustResource("food", 0);
 			System.out.println("you're out of fucking food, breh.");
