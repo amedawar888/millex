@@ -88,7 +88,7 @@ public class Game {
 		cmds.put("options", new CommandOptions("printOptions", false));
 //		cmds.put("proclaim", new CommandOptions("startProclamation", false));
 		cmds.put("collect", new CommandOptions("startCollect", true));
-//		cmds.put("build", new CommandOptions("startBuild", true));
+		cmds.put("build", new CommandOptions("startBuild", true));
 		cmds.put("end turn", new CommandOptions("endTurn", false));
 		
 		System.out.println("Welcome, Gamer, to the city of Millex. \n You will be responsible for maintaining, cultivating, \n and enhancing this city and the lives of it's inhabitants. ");
@@ -361,6 +361,20 @@ public class Game {
 		int lumber = 10 + (int)(Math.ceil(Math.random()*15));
 		Resources.adjustResource("lumber", lumber);
 		System.out.println("You've successfully collected " + lumber + " lumber! You have " + Resources.getResource("lumber") + " lumber.");
+	}
+	
+	/*
+	 * Build commands
+	 */
+	
+	private boolean buildFarm() {
+		System.out.println();
+		System.out.println("Building farm...");
+		return Buildings.buildFarm();
+	}
+	
+	private void buildLumberyard() {
+		System.out.println("Building lumberyard...");
 	}
 	
 	/*

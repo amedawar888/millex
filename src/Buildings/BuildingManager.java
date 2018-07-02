@@ -17,6 +17,16 @@ public class BuildingManager {
 		resources = res;
 	}
 	
+	public boolean buildFarm() {
+		if (resources.getResource("food") < 40 || resources.getResource("lumber") < 20) {
+			return false;
+		}
+		farms.add(new Farm(5));
+		resources.adjustResource("food", -40);
+		resources.adjustResource("lumber", -20);
+		return true;
+	}
+	
 	public int farm() {
 		int foodOut = 0;
 		
