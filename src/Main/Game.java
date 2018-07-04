@@ -227,7 +227,7 @@ public class Game {
 					boolean built = buildFarm();
 					if (built) {
 						issueCmd = true;
-						System.out.println("Farm built.");
+						System.out.println("A new farm is now under construction.");
 					}
 					else {
 						System.out.println("Sir, you do not have enough resources to build a farm.");
@@ -245,7 +245,7 @@ public class Game {
 					boolean built = buildLumberyard();
 					if (built) {						
 						issueCmd = true;
-						System.out.println("Lumberyard built.");
+						System.out.println("A new lumberyard is now under construction.");
 					}
 					else {
 						System.out.println("Sir, you do not have enough resources to build a lumberyard.");
@@ -477,6 +477,8 @@ public class Game {
 		if (choppedLumber > 0) {
 			System.out.println("You chopped " + choppedLumber + " lumber with lumberyards.");
 		}
+		
+		System.out.println(Buildings.build());
 	}
 	
 	// End Building Handling

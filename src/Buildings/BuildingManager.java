@@ -17,6 +17,27 @@ public class BuildingManager {
 		resources = res;
 	}
 	
+	private String buildHelper(ArrayList<Building> buildings, String buildType) {
+		int buildingsInProgress = 0;
+		int buildingsBuilt = 0;
+		
+		for (Building building : buildings) {
+			if (!building.isBuilt()) {
+				buildingsInProgress++;
+				if (building.build()) {
+					buildingsBuilt++;
+				}
+			}
+		}
+		
+		return "Building progress: " + buildingsBuilt + " " + buildType + "(s) finished construction. " +
+			(buildingsInProgress - buildingsBuilt) + " " + buildType + "(s) still in progress.";
+	}
+	
+	public String build() {
+		return buildHelper(farms, "farm") + "\n" + buildHelper(lumberyards, "lumberyard");
+	}
+	
 	public boolean buildFarm() {
 		if (resources.getResource("food") < 40 || resources.getResource("lumber") < 20) {
 			return false;
