@@ -9,12 +9,33 @@ public class BuildingManager {
 	private ResourceManager resources;
 
 	private ArrayList<Building> homes = new ArrayList<Building>();
-	private ArrayList<Farm> farms = new ArrayList<Farm>();
-	private ArrayList<Lumberyard> lumberyards = new ArrayList<Lumberyard>();
+	private ArrayList<Building> farms = new ArrayList<Building>();
+	private ArrayList<Building> lumberyards = new ArrayList<Building>();
 	private ArrayList<Building> markets = new ArrayList<Building>();
 	
 	public BuildingManager(ResourceManager res) {
 		resources = res;
+	}
+	
+	private String buildHelper(ArrayList<Building> buildings, String buildType) {
+		int buildingsInProgress = 0;
+		int buildingsBuilt = 0;
+		
+		for (Building building : buildings) {
+			if (!building.isBuilt()) {
+				buildingsInProgress++;
+				if (building.build()) {
+					buildingsBuilt++;
+				}
+			}
+		}
+		
+		return "Building progress: " + buildingsBuilt + " " + buildType + "(s) finished construction. " +
+			(buildingsInProgress - buildingsBuilt) + " " + buildType + "(s) still in progress.";
+	}
+	
+	public String build() {
+		return buildHelper(farms, "farm") + "\n" + buildHelper(lumberyards, "lumberyard");
 	}
 	
 	public boolean buildFarm() {
@@ -40,8 +61,10 @@ public class BuildingManager {
 	public int farm() {
 		int foodOut = 0;
 		
-		for (Farm farm : farms) {
-			foodOut += farm.getFoodProduced();
+		for (Building farm : farms) {
+			if (farm.isBuilt()) {				
+				foodOut += ((Farm)farm).getFoodProduced();
+			}
 		}
 		
 		resources.adjustResource("food", foodOut);
@@ -52,8 +75,10 @@ public class BuildingManager {
 	public int chopWood() {
 		int lumberOut = 0;
 		
-		for (Lumberyard lumberyard : lumberyards) {
-			lumberOut += lumberyard.getLumberProduced();
+		for (Building lumberyard : lumberyards) {
+			if (lumberyard.isBuilt()) {				
+				lumberOut += ((Lumberyard)lumberyard).getLumberProduced();
+			}
 		}
 		
 		resources.adjustResource("lumber", lumberOut);
