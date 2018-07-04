@@ -9,8 +9,8 @@ public class BuildingManager {
 	private ResourceManager resources;
 
 	private ArrayList<Building> homes = new ArrayList<Building>();
-	private ArrayList<Farm> farms = new ArrayList<Farm>();
-	private ArrayList<Lumberyard> lumberyards = new ArrayList<Lumberyard>();
+	private ArrayList<Building> farms = new ArrayList<Building>();
+	private ArrayList<Building> lumberyards = new ArrayList<Building>();
 	private ArrayList<Building> markets = new ArrayList<Building>();
 	
 	public BuildingManager(ResourceManager res) {
@@ -40,8 +40,10 @@ public class BuildingManager {
 	public int farm() {
 		int foodOut = 0;
 		
-		for (Farm farm : farms) {
-			foodOut += farm.getFoodProduced();
+		for (Building farm : farms) {
+			if (farm.isBuilt()) {				
+				foodOut += ((Farm)farm).getFoodProduced();
+			}
 		}
 		
 		resources.adjustResource("food", foodOut);
@@ -52,8 +54,10 @@ public class BuildingManager {
 	public int chopWood() {
 		int lumberOut = 0;
 		
-		for (Lumberyard lumberyard : lumberyards) {
-			lumberOut += lumberyard.getLumberProduced();
+		for (Building lumberyard : lumberyards) {
+			if (lumberyard.isBuilt()) {				
+				lumberOut += ((Lumberyard)lumberyard).getLumberProduced();
+			}
 		}
 		
 		resources.adjustResource("lumber", lumberOut);
