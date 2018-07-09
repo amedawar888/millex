@@ -4,8 +4,9 @@ public class Farm extends Building {
 	
 	private int foodProduced;
 	
-	public Farm(int f) {
-		foodProduced = f;
+	public Farm(int food) {
+		super(1);
+		foodProduced = food;
 	}
 
 	public int getFoodProduced() {

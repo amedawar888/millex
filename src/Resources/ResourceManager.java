@@ -1,33 +1,37 @@
 package Resources;
 
-public class ResourceManager {
+import java.util.HashMap;
+import java.util.Map;
 
-	private int food = 0;
-	private int lumber = 0;
-	private int trade = 0;
+public class ResourceManager {
 	
-	public ResourceManager(int f) {
-		food = f;
+	private Map<String, Integer> resources = new HashMap<>();
+	
+	public ResourceManager(int[] resources) {
+		this.resources.put("food", resources[0]);
+		this.resources.put("lumber", resources[1]);
+		this.resources.put("gold", resources[2]);
 	}
 	
-	public int getFood() {
-		return food;
+	public int getResource(String key) {
+		try {
+			return resources.get(key);
+		} catch(Exception e) {
+			System.out.println(e);
+			return 0;
+		}
 	}
 	
-	public int getLumber() {
-		return lumber;
-	}
-	
-	public int getTrade() {
-		return trade;
-	}
-	
-	public void addFood(int f) {
-		food += f;
-	}
-	
-	public void removeFood(int f) {
-		food = Math.max(food-f, 0);
+	public boolean adjustResource(String key, int amount) {
+		try {
+			int res = resources.get(key);
+			resources.put(key, res + amount);
+			return true;
+			
+		} catch(Exception e) {
+			System.out.println(e);
+			return false;
+		}
 	}
 	
 }
