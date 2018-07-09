@@ -29,7 +29,9 @@ public class Game {
 	
 	/////////////////////////
 	
-	public int turn = 1;
+	public int turn = 0, year = 1;
+	
+	public String[] seasons = {"spring", "summer", "fall", "winter"};
 	
 	public Map<String, CommandOptions> cmds = new HashMap<>();
 	
@@ -73,6 +75,8 @@ public class Game {
 	
 	public int startingPopulation = 23;
 	
+	private int deathCount = 0;
+	
 	public double halfRations =  0.5;
 	
 	public double doubleRations = 2;
@@ -98,7 +102,8 @@ public class Game {
 	
 	private void initPopulation(int numSubs) {
 		for(int i = 0; i<numSubs; i++) {
-			subs.add(new Person());
+			Person person = new Person(16 + (int)Math.ceil(Math.random()*8));
+			subs.add(person);
 		}
 	}
 	
@@ -395,7 +400,9 @@ public class Game {
 	}
 	
 	public void endTurn() {
-		turn ++;
+		advanceTime();
+		resolveCmds();
+		handleSubs();
 		
 		handleSubs();
 		//check if sub is giving birth -> add persons to subset and set givingbirth to false
@@ -425,7 +432,22 @@ public class Game {
 			System.out.println("you're out of fucking moniez, nigga.");
 		}
 		cmdList.clear();
-		System.out.println("Next Turn: It is now turn "+turn+".");
+		
+		if (deathCount > 0) {
+			System.out.println("Aweeee fuck, you've lost " + deathCount + " niggas");
+			deathCount = 0;
+		}
+		
+		System.out.println();
+	}
+
+	public void advanceTime() {
+		turn ++;
+		if (turn >= 4) {
+			year++;
+			turn = 0;
+		}
+		System.out.println(seasons[turn] + " - Year " + year);
 	}
 	
 	/*
@@ -488,13 +510,20 @@ public class Game {
 	 */
 	private void handleSubs() {
 		int newPeoples = 0;
-		for (Person sub : subs) {
+		ArrayList<Person> deadPeople = new ArrayList<Person>();
+		for (Person sub : subs) { //for element in array -> ":"
 			sub.step();
 			if (sub.birth) {
 				newPeoples++;
 				sub.birth = false;
 			}
+			if (sub.isDead()) {
+				deadPeople.add(sub);
+				deathCount++;
+			}
 		}
+		subs.removeAll(deadPeople);
+		
 		for (int i=0; i < newPeoples; i++) {
 			subs.add(new Person());
 		}
