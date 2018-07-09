@@ -25,7 +25,7 @@ public class ResourceManager {
 	public boolean adjustResource(String key, int amount) {
 		try {
 			int res = resources.get(key);
-			resources.put(key, res + amount);
+			resources.put(key, Math.max(res + amount, 0));
 			return true;
 			
 		} catch(Exception e) {
