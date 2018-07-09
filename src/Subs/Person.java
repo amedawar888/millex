@@ -12,6 +12,8 @@ public class Person {
 	
 	//Age is measured in turns (seasons). 0-16 = child; 16-40 = adult; 40+ elder.
 	private int age;
+	private int maxHealth = 100;
+	private int health = 100;
 	private double deathThreshold = 0.01;
 	private boolean dead = false;
 	private boolean pregnant = false;
@@ -55,7 +57,7 @@ public class Person {
 		age++;
 		double badLuck = Math.random();
 		deathThreshold += (Math.random()/1000);
-		if (badLuck <= deathThreshold) {
+		if (badLuck <= deathThreshold || health <= 0) {
 			dead = true;
 		}
 		if (pregnant) {
@@ -67,6 +69,16 @@ public class Person {
 				pregnant = false;
 				birth = true;
 			}
+		}
+	}
+	
+	public void eatFood(double f) {
+		double foodRatio = f/foodConsumed;
+		if (foodRatio > 0.75) {
+			health = Math.min(maxHealth, health + (int)(((foodRatio - 0.75) * 4) + (20 + Math.random() * 35)));
+		}
+		else {
+			health -= (int)((0.75 - foodRatio) * (100 + Math.random() * 100));
 		}
 	}
 	
