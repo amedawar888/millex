@@ -72,6 +72,16 @@ public class Person {
 		}
 	}
 	
+	public void eatFood(double f) {
+		double foodRatio = f/foodConsumed;
+		if (foodRatio > 0.75) {
+			health = Math.min(maxHealth, health + (int)(((foodRatio - 0.75) * 4) + (20 + Math.random() * 35)));
+		}
+		else {
+			health -= (int)((0.75 - foodRatio) * (100 + Math.random() * 100));
+		}
+	}
+	
 	public int getPregnancyStage() {
 		return pregnancyStage;
 	}
