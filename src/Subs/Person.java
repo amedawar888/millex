@@ -12,6 +12,8 @@ public class Person {
 	
 	//Age is measured in turns (seasons). 0-16 = child; 16-40 = adult; 40+ elder.
 	private int age;
+	private int maxHealth = 100;
+	private int health = 100;
 	private double deathThreshold = 0.01;
 	private boolean dead = false;
 	private boolean pregnant = false;
