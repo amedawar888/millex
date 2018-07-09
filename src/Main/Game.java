@@ -558,6 +558,11 @@ public class Game {
 		
 		Resources.adjustResource("food", -(int)(foodC*foodMultiplier));
 		foodMultiplier = 1;
+		
+		double foodRatio = Math.min(1, (double)Resources.getResource("food") / foodC);
+		for (Person sub : subs) {
+			sub.eatFood(foodRatio*sub.foodConsumed);
+		}
 	}
 	
 	private ArrayList<Person> getSubsByGender(boolean gen){
