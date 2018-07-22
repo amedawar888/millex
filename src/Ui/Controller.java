@@ -19,6 +19,8 @@ public class Controller {
 		
 		ui = new Gui();
 		
+		ui.update(game.exportPopulation());
+		
 		window.getContentPane().add(ui);
 		
 		window.setVisible(true);
