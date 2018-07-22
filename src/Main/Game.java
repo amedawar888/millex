@@ -404,9 +404,6 @@ public class Game implements Runnable {
 	
 	public void endTurn() {
 		advanceTime();
-		resolveCmds();
-		handleSubs();
-		
 		handleSubs();
 		//check if sub is giving birth -> add persons to subset and set givingbirth to false
 		popGrowth();
@@ -584,44 +581,26 @@ public class Game implements Runnable {
 	// End Population Handling
 	
 	/*
-	 * Legacy Stuff
+	 * Start Export Methods
 	 */
-	public void resolveCmds() {
-		for (int i=0; i<cmdList.size(); i++) {
-			if (cmdList.get(i)==0) {
-				farm();
+	
+	public HashMap<String,Integer> exportPopulation() {
+		HashMap<String, Integer> output = new HashMap<>();
+		int males = 0, females = 0;
+		for (Person sub : subs){
+			if (sub.gender) {
+				males++;
 			}
-			else if (cmdList.get(i)==1) {
-				lumber();
-			}
-			else if (cmdList.get(i)==2) {
-				build();
-			}
-			else if (cmdList.get(i)==3) {
-				finance();
+			else {
+				females++;
 			}
 		}
-	}
 		
-	public void farm() {
-		Resources.adjustResource("food", 15);
-		System.out.println("You've successfully farmed! You have " + Resources.getResource("food") + " food.");
-	}
-	public void lumber() {
-		lumber+=5;
-		System.out.println("You've successfully acquired lumber! You have " + lumber + " lumber.");
-	}
-	public void build() {
-		buildPower+=15;
-		finance-=2;
-		lumber-=2;
-		System.out.println("You can build! You have " + buildPower + " buid power. What would like to build?");
-	}
-	public void finance() {
-		finance+=10;
-		Resources.adjustResource("food", -3);
-		System.out.println("You've successfully financed! You have " + finance + " gold.");
+		output.put("males", males);
+		output.put("females", females);
+		
+		return output;
 	}
 	
-	// End Legacy Stuff
+	// End Export Methods
 }
