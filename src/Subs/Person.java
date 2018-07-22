@@ -14,7 +14,8 @@ public class Person {
 	private int age;
 	private int maxHealth = 100;
 	private int health = 100;
-	private double deathThreshold = 0.01;
+	private double deathThreshold = 0.001;
+	private final double DEATHFACTOR = 1.015;
 	private boolean dead = false;
 	private boolean pregnant = false;
 	private int pregnancyStage = -1;
@@ -31,12 +32,18 @@ public class Person {
 	public Person() {
 		age = 0;
 	}
-	
+		
 	public Person(int a) {
 		age = a;
-		deathThreshold += (Math.random()/1000)*age;
+		for (int i=0; i<age; i++) {
+			age();
+		}
 	}
 
+	private void age() {
+		deathThreshold *= (DEATHFACTOR + ((double)age / 400));
+	}
+	
 	public boolean isChild() {
 		return age <= 16;
 	}
@@ -56,7 +63,7 @@ public class Person {
 	public void step() {
 		age++;
 		double badLuck = Math.random();
-		deathThreshold += (Math.random()/1000);
+		age();
 		if (badLuck <= deathThreshold || health <= 0) {
 			dead = true;
 		}
