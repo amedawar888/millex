@@ -19,7 +19,7 @@ import Misc.CommandOptions;
 import Resources.ResourceManager;
 import Subs.Person;
 
-public class Game {
+public class Game implements Runnable {
 	
 	
 	public ResourceManager Resources = new ResourceManager(new int[]{50,20,100});
@@ -94,7 +94,10 @@ public class Game {
 		cmds.put("collect", new CommandOptions("startCollect", true));
 		cmds.put("build", new CommandOptions("startBuild", true));
 		cmds.put("end turn", new CommandOptions("endTurn", false));
-		
+	}
+	
+	@Override
+	public void run() {
 		System.out.println("Welcome, Gamer, to the city of Millex. \n You will be responsible for maintaining, cultivating, \n and enhancing this city and the lives of it's inhabitants. ");
 		initPopulation(startingPopulation);
 		scanInput();
